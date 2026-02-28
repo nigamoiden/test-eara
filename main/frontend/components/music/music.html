@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Music OS</title>
+  <link rel="stylesheet" href="music.css">
+  <script src="music.js"></script>
+</head>
+<body>
+
+  <div class="music-container">
+
+    <!-- Horizontal Control Bar -->
+    <div class="control-carousel" id="carousel">
+      <button class="control-btn active" onclick="showSection('search')">🔍</button>
+      <button class="control-btn" onclick="showSection('playlist')">📂</button>
+      <button class="control-btn" onclick="showSection('library')">🎼</button>
+      <button class="control-btn" onclick="connectBluetooth()">📡</button>
+      <button class="control-btn" onclick="showSection('now')">▶</button>
+    </div>
+
+    <!-- Sections -->
+    <div id="content">
+
+      <div id="search" class="section active">
+        <input type="text" id="searchInput" placeholder="Tìm bài hát...">
+        <button onclick="searchMusic()">Search</button>
+      </div>
+
+      <div id="playlist" class="section">
+        <h3>Playlist</h3>
+        <div id="playlistContainer"></div>
+      </div>
+
+      <div id="library" class="section">
+        <h3>Library</h3>
+        <button onclick="playMusic()">Phát nhạc mẫu</button>
+      </div>
+
+      <div id="now" class="section">
+        <h3>Now Playing</h3>
+        <p id="nowPlaying">Chưa có bài</p>
+      </div>
+
+    </div>
+
+    <audio id="audioPlayer" src="assets/music.mp3"></audio>
+
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/music.js"></script>
+
+</body>
+</html>

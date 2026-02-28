@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+  background: #0f0f12;
+  font-family: sans-serif;
+  color: white;
+  overflow: hidden;
+}
+
+.music-container {
+  padding: 15px;
+}
+
+.control-carousel {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 10px;
+}
+
+.control-btn {
+  min-width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+  color: white;
+  font-size: 22px;
+  transition: 0.3s;
+  position: relative;
+  cursor: pointer;
+}
+
+.control-btn.active {
+  transform: scale(1.2);
+  background: rgba(0,150,255,0.3);
+}
+
+.control-btn:active::after {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, transparent 60%);
+  top: -25%;
+  left: -25%;
+  animation: flash 0.4s;
+}
+
+.section {
+  display: none;
+  margin-top: 20px;
+}
+
+.section.active {
+  display: block;
+}
+
+input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 15px;
+  border: none;
+  background: #1e1e22;
+  color: white;
+}
