@@ -1,17 +1,19 @@
 #include <Arduino.h>
+#include <Preferences.h>
 
-void audio_init() {
-    Serial.println("Audio Init");
+Preferences prefs;
+
+void storage_init()
+{
+    prefs.begin("eara", false);
 }
 
-void audio_set_volume(int level) {
-    Serial.println("Set volume: " + String(level));
+void save_history(String song)
+{
+    prefs.putString("last_song", song);
 }
 
-void audio_play() {
-    Serial.println("Play");
-}
-
-void audio_pause() {
-    Serial.println("Pause");
+String load_history()
+{
+    return prefs.getString("last_song", "");
 }

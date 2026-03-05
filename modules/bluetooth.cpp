@@ -1,17 +1,22 @@
-#include <Arduino.h>
-#include "BluetoothA2DPSource.h"
+#include <BluetoothSerial.h>
 
-BluetoothA2DPSource a2dp;
+BluetoothSerial SerialBT;
 
-void bluetooth_init() {
-    a2dp.start("Eara_Device");
+void bluetooth_init()
+{
+    SerialBT.begin("EARA_DEVICE");
 }
 
-void bluetooth_send_command(String json) {
-    Serial.println("Sending: " + json);
-    // Sau này gửi BLE JSON thật
+void bluetooth_send(String msg)
+{
+    SerialBT.println(msg);
 }
 
-void bluetooth_loop() {
-    // xử lý event bluetooth
+String bluetooth_read()
+{
+    if (SerialBT.available())
+    {
+        return SerialBT.readString();
+    }
+    return "";
 }

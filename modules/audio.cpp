@@ -1,17 +1,21 @@
 #include <Arduino.h>
 
-void audio_init() {
-    Serial.println("Audio Init");
+void audio_init()
+{
+    Serial.println("Audio init");
 }
 
-void audio_set_volume(int level) {
-    Serial.println("Set volume: " + String(level));
+void audio_play(String url)
+{
+    Serial.println("Play: " + url);
 }
 
-void audio_play() {
-    Serial.println("Play");
-}
-
-void audio_pause() {
+void audio_pause()
+{
     Serial.println("Pause");
+}
+
+void audio_next()
+{
+    Serial.println("Next song");
 }

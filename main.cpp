@@ -1,57 +1,56 @@
 #include <Arduino.h>
 #include <lvgl.h>
+#include <TFT_eSPI.h>
+
+#include "ui/ui_home.h"
 #include "modules/state_manager.h"
-#include "modules/bluetooth.h"
-#include "modules/audio.h"
-#include "modules/storage.h"
 
-TaskHandle_t uiTaskHandle;
-TaskHandle_t systemTaskHandle;
+TFT_eSPI tft = TFT_eSPI();
 
-void uiTask(void *pvParameters) {
-    lv_init();
-    state_init();     // khởi tạo state machine
-    ui_show_home();   // màn hình đầu tiên
+static lv_disp_draw_buf_t draw_buf;
+static lv_color_t buf[320 * 20];
 
-    while (1) {
-        lv_timer_handler();
-        vTaskDelay(pdMS_TO_TICKS(5));
-    }
+void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
+{
+    uint32_t w = (area->x2 - area->x1 + 1);
+    uint32_t h = (area->y2 - area->y1 + 1);
+
+    tft.startWrite();
+    tft.setAddrWindow(area->x1, area->y1, w, h);
+    tft.pushColors((uint16_t *)&color_p->full, w * h, true);
+    tft.endWrite();
+
+    lv_disp_flush_ready(disp);
 }
 
-void systemTask(void *pvParameters) {
-    bluetooth_init();
-    audio_init();
-    storage_init();
-
-    while (1) {
-        bluetooth_loop();
-        vTaskDelay(pdMS_TO_TICKS(10));
-    }
-}
-
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
-    xTaskCreatePinnedToCore(
-        uiTask,
-        "UI Task",
-        8192,
-        NULL,
-        1,
-        &uiTaskHandle,
-        1
-    );
+    tft.begin();
+    tft.setRotation(1);
 
-    xTaskCreatePinnedToCore(
-        systemTask,
-        "System Task",
-        8192,
-        NULL,
-        1,
-        &systemTaskHandle,
-        0
-    );
+    lv_init();
+
+    lv_disp_draw_buf_init(&draw_buf, buf, NULL, 320 * 20);
+
+    static lv_disp_drv_t disp_drv;
+    lv_disp_drv_init(&disp_drv);
+
+    disp_drv.hor_res = 320;
+    disp_drv.ver_res = 240;
+    disp_drv.flush_cb = my_disp_flush;
+    disp_drv.draw_buf = &draw_buf;
+
+    lv_disp_drv_register(&disp_drv);
+
+    state_init();
+
+    ui_home_create();
 }
 
-void loop() {}
+void loop()
+{
+    lv_timer_handler();
+    delay(5);
+}
